@@ -10,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    protected $table = "User";
+    public $timestamps = false;
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -18,9 +20,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'Username',
+        'Email',
+        'Phone',
+        'Password',
+        'Role'
     ];
 
     /**
@@ -29,8 +33,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'Password'
     ];
 
     /**
@@ -39,7 +42,22 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'Password' => 'hashed',
     ];
+
+    /**
+     * Get the password for the user.
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->Password;
+    }
+
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
+
 }
